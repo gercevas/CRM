@@ -5,6 +5,7 @@ import os
 DB_PATH = "crm.sqlite"
 
 def create_tables():
+    # Conectar a SQLite
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
@@ -17,7 +18,7 @@ def create_tables():
         email TEXT NOT NULL UNIQUE,
         phone TEXT,
         address TEXT,
-        created_at TEXT NOT NULL
+        registration_date TEXT NOT NULL
     );
     """)
 
