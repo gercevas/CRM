@@ -1,6 +1,5 @@
 from backend.services.user_service import UserService
 
-
 class UserController:
     """
     Controlador para manejar las acciones relacionadas con usuarios.
@@ -14,10 +13,8 @@ class UserController:
         first_name = input("Ingrese nombre: ").strip()
         last_name = input("Ingrese apellidos: ").strip()
         email = input("Ingrese email: ").strip()
-        phone = input("Ingrese teléfono (opcional): ").strip()
-        phone = phone if phone else None
-        address = input("Ingrese dirección (opcional): ").strip()
-        address = address if address else None
+        phone = input("Ingrese teléfono (opcional): ").strip() or None
+        address = input("Ingrese dirección (opcional): ").strip() or None
 
         success, result = self.service.create_user(
             first_name, last_name, email, phone, address
@@ -26,14 +23,18 @@ class UserController:
         if success:
             print("\nUsuario registrado exitosamente!")
             print(f"ID asignado: {result.id}")
-            print(f"Fecha de registro: {result.registration_date.strftime('%d/%m/%Y')}")
+            print(f"Fecha de registro: {result.registration_date}")
         else:
             print(f"\nError: {result}")
 
     def buscar_usuario(self):
-        criterio = input("Buscar por (1) Email o (2) Nombre: ").strip()
+        print("\n=== BUSCAR USUARIO ===")
+        print("1. Buscar por email")
+        print("2. Buscar por nombre")
+        criterio = input("Seleccione método de búsqueda: ").strip()
+
         if criterio == "1":
-            email = input("Ingrese el email del usuario: ").strip()
+            email = input("Ingrese email: ").strip()
             user = self.service.find_by_email(email)
             if user:
                 self._mostrar_usuario(user)
@@ -51,18 +52,21 @@ class UserController:
             print("Opción inválida.")
 
     def mostrar_usuarios(self):
+        print("\n=== LISTA DE USUARIOS ===")
         usuarios = self.service.list_users()
         if not usuarios:
             print("No hay usuarios registrados.")
         else:
-            for user in usuarios:
+            for i, user in enumerate(usuarios, start=1):
+                print(f"\nUsuario #{i}:")
                 self._mostrar_usuario(user)
+            print(f"\nTotal de usuarios registrados: {len(usuarios)}")
 
     def _mostrar_usuario(self, user):
-        print("\n--- Usuario ---")
+        print("\n--- USUARIO ENCONTRADO ---")
         print(f"ID: {user.id}")
         print(f"Nombre: {user.first_name} {user.last_name}")
         print(f"Email: {user.email}")
         print(f"Teléfono: {user.phone if user.phone else 'No registrado'}")
         print(f"Dirección: {user.address if user.address else 'No registrada'}")
-        print(f"Registrado el: {user.registration_date.strftime('%d/%m/%Y')}")
+        print(f"Fecha de registro: {user.registration_date}")

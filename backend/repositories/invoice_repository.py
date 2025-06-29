@@ -1,70 +1,33 @@
+# backend/repositories/invoice_repository.py
+
 from backend.models.invoice import Invoice
-from backend.storage.database import get_connection
+from backend.utils.singleton import Singleton
 
-
-class InvoiceRepository:
+class InvoiceRepository(metaclass=Singleton):
     """
-    Repositorio para manejar operaciones con la tabla de facturas.
+    Repositorio para gestionar el almacenamiento de facturas en memoria.
+    Implementado como Singleton para mantener consistencia de datos en el sistema.
     """
 
     def __init__(self):
-        self.conn = get_connection()
-        self._create_table()
-
-    def _create_table(self):
-        cursor = self.conn.cursor()
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS invoices (
-                id TEXT PRIMARY KEY,
-                user_id TEXT NOT NULL,
-                description TEXT NOT NULL,
-                amount REAL NOT NULL,
-                status TEXT NOT NULL,
-                issue_date TEXT NOT NULL,
-                FOREIGN KEY(user_id) REFERENCES users(id)
-            )
-        """)
-        self.conn.commit()
+        self.invoices = []
 
     def save_invoice(self, invoice: Invoice):
-        cursor = self.conn.cursor()
-        cursor.execute("""
-            INSERT INTO invoices (id, user_id, description, amount, status, issue_date)
-            VALUES (?, ?, ?, ?, ?, ?)
-        """, (
-            invoice.id,
-            invoice.user_id,
-            invoice.description,
-            invoice.amount,
-            invoice.status,
-            invoice.issue_date.strftime("%Y-%m-%d %H:%M:%S")
-        ))
-        self.conn.commit()
-
-    def find_by_user(self, user_id):
-        cursor = self.conn.cursor()
-        cursor.execute("SELECT * FROM invoices WHERE user_id = ?", (user_id,))
-        rows = cursor.fetchall()
-        return [Invoice(*row) for row in rows]
+        self.invoices.append(invoice)
 
     def get_next_invoice_id(self):
-        cursor = self.conn.cursor()
-        cursor.execute("SELECT id FROM invoices ORDER BY id DESC LIMIT 1")
-        row = cursor.fetchone()
-        if not row:
-            return "FAC001"
-        last_id = int(row[0].replace("FAC", ""))
-        return f"FAC{last_id + 1:03}"
+        return f"INV{len(self.invoices) + 1:03d}"
 
-    def resumen_financiero_por_usuario(self, user_id):
-        cursor = self.conn.cursor()
-        cursor.execute("""
-            SELECT
-                COUNT(*) as total_facturas,
-                SUM(amount) as monto_total,
-                SUM(CASE WHEN status = 'pagado' THEN amount ELSE 0 END) as pagado,
-                SUM(CASE WHEN status = 'pendiente' THEN amount ELSE 0 END) as pendiente
-            FROM invoices
-            WHERE user_id = ?
-        """, (user_id,))
-        return cursor.fetchone()
+    def find_by_user(self, user_email: str):
+        # Busca por email, ya que el modelo usa `user_email`
+        email = user_email.strip().lower()
+        return [factura for factura in self.invoices if factura.user_email == email]
+
+    def resumen_financiero_por_usuario(self, user_email: str):
+        facturas = self.find_by_user(user_email)
+        total_monto = sum(f.amount for f in facturas)
+        pagadas = sum(f.amount for f in facturas if f.status_code == "2")
+        pendientes = sum(f.amount for f in facturas if f.status_code == "1")
+        canceladas = sum(f.amount for f in facturas if f.status_code == "3")
+
+        return len(facturas), total_monto, pagadas, pendientes

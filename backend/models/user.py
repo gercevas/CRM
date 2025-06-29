@@ -5,8 +5,9 @@ class User:
     Clase que representa a un usuario (cliente) en el sistema CRM.
     """
 
-    def __init__(self, id, first_name, last_name, email, phone=None, address=None, registration_date=None):
-        self.id = id  # Este puede ser generado automáticamente por la BBDD
+    def __init__(self, id: str, first_name: str, last_name: str, email: str,
+                 phone: str = None, address: str = None, registration_date: str = None):
+        self.id = id
         self.first_name = first_name.strip()
         self.last_name = last_name.strip()
         self.email = email.strip().lower()
@@ -18,9 +19,6 @@ class User:
         return f"{self.first_name} {self.last_name}"
 
     def to_dict(self):
-        """
-        Convierte el objeto en un diccionario. Útil para serialización o impresión.
-        """
         return {
             "id": self.id,
             "first_name": self.first_name,
@@ -33,3 +31,6 @@ class User:
 
     def __str__(self):
         return f"{self.full_name()} ({self.email}) - Registrado el {self.registration_date}"
+
+    def __repr__(self):
+        return f"User(id={self.id}, email={self.email})"

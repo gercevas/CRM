@@ -16,14 +16,14 @@ class Invoice:
         self.user_email = user_email.strip().lower()
         self.description = description.strip()
         self.amount = float(amount)
-        self.status_code = status_code  # '1', '2' o '3'
+        self.status_code = status_code.strip()  # '1', '2' o '3'
         self.issue_date = issue_date or datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     def status_text(self):
         """
         Devuelve el texto legible del estado de la factura.
         """
-        return self.STATUS_OPTIONS.get(self.status_code, "Desconocido")
+        return self.STATUS_OPTIONS.get(self.status_code, "desconocido")
 
     def to_dict(self):
         """
@@ -40,4 +40,7 @@ class Invoice:
         }
 
     def __str__(self):
-        return f"Factura #{self.id} | Cliente: {self.user_email} | Monto: ${self.amount:.2f} | Estado: {self.status_text()}"
+        return (
+            f"Factura #{self.id} | Cliente: {self.user_email} "
+            f"| Monto: €{self.amount:.2f} | Estado: {self.status_text()}"
+        )

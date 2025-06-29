@@ -1,10 +1,5 @@
 {
     "db_type": "sqlite",
-    "sqlite_path": "crm_data.db",
-
-    "host": "your-neon-host",
-    "port": 5432,
-    "database": "your-db-name",
-    "user": "your-username",
-    "password": "your-password"
-}
+    "sqlite_path": "crm.sqlite"
+  }
+  

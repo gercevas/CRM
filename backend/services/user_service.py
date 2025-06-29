@@ -2,7 +2,6 @@ from backend.models.user import User
 from backend.utils.validators import Validator
 from backend.repositories.user_repository import UserRepository
 
-
 class UserService:
     """
     Servicio que gestiona la lógica de negocio para usuarios.
@@ -45,7 +44,7 @@ class UserService:
         """
         Genera el próximo ID de usuario en formato USR001, USR002, ...
         """
-        users = self.repo.list_all()
+        users = self.repo.list_users()
         if not users:
             return "USR001"
 
@@ -57,7 +56,7 @@ class UserService:
         """
         Devuelve todos los usuarios.
         """
-        return self.repo.list_all()
+        return self.repo.list_users()
 
     def find_by_email(self, email):
         """
