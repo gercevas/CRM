@@ -22,17 +22,20 @@ def create_tables():
     );
     """)
 
-    # Crear tabla de facturas
+ # Crear tabla de facturas (alineada con el modelo Invoice)
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS invoices (
         id TEXT PRIMARY KEY,
         user_id TEXT NOT NULL,
         description TEXT NOT NULL,
         amount REAL NOT NULL,
+        status_code TEXT NOT NULL,
+        issue_date TEXT NOT NULL,
         created_at TEXT NOT NULL,
         FOREIGN KEY (user_id) REFERENCES users(id)
     );
     """)
+
 
     conn.commit()
     conn.close()
