@@ -30,7 +30,6 @@ def create_tables():
         description TEXT NOT NULL,
         amount REAL NOT NULL,
         status_code TEXT NOT NULL,
-        issue_date TEXT NOT NULL,
         created_at TEXT NOT NULL,
         FOREIGN KEY (user_id) REFERENCES users(id)
     );

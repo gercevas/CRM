@@ -37,7 +37,6 @@ class Invoice:
         self.description = description.strip()
         self.amount = float(amount)
         self.status_code = status_code.strip()
-        self.issue_date = issue_date or datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.created_at = created_at or datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     def status_text(self):
@@ -51,7 +50,6 @@ class Invoice:
             "amount": self.amount,
             "status": self.status_text(),
             "status_code": self.status_code,
-            "issue_date": self.issue_date,
             "created_at": self.created_at
         }
 
@@ -79,7 +77,7 @@ class Invoice:
             "amount": self.amount,
             "status": self.status_text(),
             "status_code": self.status_code,
-            "issue_date": self.issue_date
+            "created_at": self.created_at
         }
 
     def __str__(self):

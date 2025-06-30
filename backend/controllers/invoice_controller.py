@@ -53,7 +53,7 @@ class InvoiceController:
             print(f"Descripción: {result.description}")
             print(f"Monto: {result.amount:.2f} €")
             print(f"Estado: {result.status_text()}")
-            print(f"Fecha: {result.issue_date}")
+            print(f"Fecha: {result.created_at}")
         else:
             print(f"\nError al crear factura: {result}")
 
@@ -72,7 +72,7 @@ class InvoiceController:
                 print(f"- Descripción: {f.description}")
                 print(f"- Monto: {f.amount:.2f} €")
                 print(f"- Estado: {f.status_text()}")
-                print(f"- Fecha: {f.issue_date}")
+                print(f"- Fecha: {f.created_at}")
 
     def mostrar_resumen_usuario(self):
         print("\n=== RESUMEN FINANCIERO POR USUARIO ===")
