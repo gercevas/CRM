@@ -1,5 +1,4 @@
 from backend.services.invoice_service import InvoiceService
-from backend.repositories.user_repository import UserRepository
 
 class InvoiceController:
     """
