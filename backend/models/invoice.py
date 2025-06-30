@@ -1,5 +1,4 @@
 from datetime import datetime
-
 class Invoice:
     """
     Clase que representa una factura asociada a un usuario del sistema CRM.
@@ -11,27 +10,7 @@ class Invoice:
         "3": "Cancelada"
     }
 
-    def __init__(self, id, user_email, description, amount, status_code, issue_date=None):
-        self.id = id  # Código autogenerado, como FAC001
-        self.user_email = user_email.strip().lower()
-        self.description = description.strip()
-        self.amount = float(amount)
-        self.status_code = status_code.strip()  # '1', '2' o '3'
-        self.issue_date = issue_date or datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        from datetime import datetime
-
-class Invoice:
-    """
-    Clase que representa una factura asociada a un usuario del sistema CRM.
-    """
-
-    STATUS_OPTIONS = {
-        "1": "Pendiente",
-        "2": "Pagada",
-        "3": "Cancelada"
-    }
-
-    def __init__(self, id, user_email, description, amount, status_code, issue_date=None, created_at=None):
+    def __init__(self, id, user_email, description, amount, status_code, created_at=None):
         self.id = id
         self.user_email = user_email.strip().lower()
         self.description = description.strip()
