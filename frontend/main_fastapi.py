@@ -14,3 +14,7 @@ app.include_router(invoice_router.router)
 @app.get("/")
 def read_root():
     return {"message": "Bienvenido a la API del CRM. Visita /docs para ver la documentación."}
+
+@app.get("/health")
+def health_check():
+    return {"status": "ok"}
