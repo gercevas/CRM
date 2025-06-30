@@ -13,15 +13,14 @@ class InvoiceRepository(metaclass=Singleton):
         conn = get_connection()
         cursor = conn.cursor()
         cursor.execute("""
-            INSERT INTO invoices (id, user_id, description, amount, status_code, issue_date, created_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO invoices (id, user_id, description, amount, status_code, created_at)
+            VALUES (?, ?, ?, ?, ?, ?)
         """, (
             invoice.id,
             invoice.user_email,  # Aquí se usa el email como identificador, tal como has indicado
             invoice.description,
             invoice.amount,
             invoice.status_code,
-            invoice.issue_date,
             invoice.created_at
         ))
         conn.commit()
