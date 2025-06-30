@@ -14,7 +14,7 @@ class InvoiceResponse(BaseModel):
     amount: float
     status_code: str
     status: str
-    issue_date: str
+    created_at: str
 
 class ResumenFinanciero(BaseModel):
     total_facturas: int
