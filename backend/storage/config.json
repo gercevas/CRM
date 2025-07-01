@@ -1,0 +1,5 @@
+{
+    "db_type": "sqlite",
+    "sqlite_path": "crm.sqlite"
+  }
+  
