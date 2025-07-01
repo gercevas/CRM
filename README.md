@@ -325,7 +325,8 @@ pip install -r requirements.txt
 In the root of the project, create a file called .env and add the following:
 
 ```bash
-DATABASE_URL=sqlite:///./crm.sqlite
+DB_TYPE=sqlite
+SQLITE_PATH=crm.sqlite
 ```
 
 5. Initialize the database
