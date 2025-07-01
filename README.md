@@ -32,26 +32,28 @@ This CRM system allows users to manage customer data and invoices efficiently. I
 
 ## Architecture
 
+
+El sistema sigue una arquitectura limpia por capas, que separa controladores, servicios, repositorios y esquemas. Esto facilita el mantenimiento, escalabilidad y desacoplamiento entre frontend y backend.
+
+- Backend: FastAPI con SQLite y estructura modular.
+- Frontend: Next.js (exportado desde v0.dev) para la interfaz gráfica.
+- Infraestructura: Uso local, sin Docker por el momento.
+
 ### Backend
+El backend está desarrollado en FastAPI, con una estructura profesional por capas:
 
-The backend is responsible for:
-- Business logic implementation.
-- Data validation using custom validators.
-- Persistence management via repositories.
-- Interaction with SQLite database.
-
-Key components:
-- **Controllers**: Handle user and invoice operations.
-- **Services**: Implement business logic.
-- **Repositories**: Manage data storage and retrieval.
-- **Models**: Represent entities like `User` and `Invoice`.
+routers/: define los endpoints REST.
+schemas/: valida los datos de entrada y salida.
+services/: implementa la lógica de negocio.
+repositories/: gestiona el acceso a la base de datos (SQLite).
+utils/database.py: permite alternar entre bases de datos según .env.
 
 ### Frontend
+La interfaz de usuario está desarrollada en Next.js, exportada desde v0.dev, y conectada a la API REST del backend. Permite interactuar con el sistema CRM (crear usuarios, consultar facturas, etc.) desde el navegador.
 
-The frontend exposes the backend functionality via a FastAPI-based REST API. It includes:
-- **Routers**: Define API endpoints for users and invoices.
-- **Schemas**: Validate and structure API request/response data.
-- **Services**: Bridge between frontend and backend logic.
+Corre localmente en http://localhost:8000 (según configuración del frontend).
+Se comunica con la API del backend en http://localhost:3000.
+Está desacoplado del backend, respetando la arquitectura por capas.
 
 ---
 
@@ -147,13 +149,49 @@ classDiagram
     InvoiceService --> UserService : usa
 ```
 
+- User e Invoice: Modelos de datos principales.
+- Controllers: Manejan las solicitudes HTTP.
+- Services: Contienen la lógica de negocio.
+- Repositories: Gestionan el acceso a datos.
+- Relaciones: Muestra cómo interactúan las clases.
+
 ### Detailed Class Diagram
 
 ![Detailed Class Diagram](imagenes/DetailedClassDiagram.png)
 
+
+Incluye:
+- Entidades de Dominio
+- Capa de Controladores (FastAPI)
+- Capa de Servicios
+- Capa de Repositorios
+- Relaciones Principales
+- Patrones de Diseño
+- Validaciones
+- Mapeo ORM
+
+
 ### Relational Database Model
 
 ![Relational Database Model](imagenes/RelationalDatabase.png)
+
+Relaciones:
+
+Un usuario (users) puede tener múltiples facturas (invoices)
+La relación se establece a través del campo user_email en la tabla invoices que referencia el campo email en la tabla users
+
+Claves Principales (PK)
+users.id: Identificador único de cada usuario
+invoices.id: Identificador único de cada factura
+Claves Foráneas (FK)
+invoices.user_email: Referencia a users.email (relación uno a muchos)
+Índices
+users.email: Para búsquedas rápidas por correo
+invoices.user_email: Para optimizar consultas de facturas por usuario
+Feedback submitted
+
+
+
 
 ### Use Cases and Sequence Diagrams
 
@@ -315,3 +353,7 @@ Esto levanta el servidor de la API en modo desarrollo en el puerto 8000.
 8. Accede a la documentación de la API:
 
 Frontend (FastAPI docs): http://localhost:8000/docs
+
+
+## Requisitos
+
