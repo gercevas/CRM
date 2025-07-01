@@ -32,29 +32,27 @@ This CRM system allows users to manage customer data and invoices efficiently. I
 
 ## Architecture
 
+The system follows a clean layered architecture that separates controllers, services, repositories, and schemas. This promotes maintainability, scalability, and decoupling between frontend and backend.
 
-El sistema sigue una arquitectura limpia por capas, que separa controladores, servicios, repositorios y esquemas. Esto facilita el mantenimiento, escalabilidad y desacoplamiento entre frontend y backend.
-
-- Backend: FastAPI con SQLite y estructura modular.
-- Frontend: Next.js (exportado desde v0.dev) para la interfaz gráfica.
-- Infraestructura: Uso local, sin Docker por el momento.
+- Backend: Built with FastAPI and SQLite using a modular structure.
+- Frontend: Implemented with Next.js (exported from v0.dev) as the graphical user interface.
+- Infrastructure: Local development setup; Docker not yet configured.
 
 ### Backend
-El backend está desarrollado en FastAPI, con una estructura profesional por capas:
+The backend is developed using FastAPI with a clean, professional layered architecture:
 
-routers/: define los endpoints REST.
-schemas/: valida los datos de entrada y salida.
-services/: implementa la lógica de negocio.
-repositories/: gestiona el acceso a la base de datos (SQLite).
-utils/database.py: permite alternar entre bases de datos según .env.
+- routers/: Defines REST endpoints.
+- schemas/: Validates input and output data.
+- services/: Implements business logic.
+- repositories/: Manages access to the database (SQLite).
+- utils/database.py: Enables switching databases via .env.
 
 ### Frontend
-La interfaz de usuario está desarrollada en Next.js, exportada desde v0.dev, y conectada a la API REST del backend. Permite interactuar con el sistema CRM (crear usuarios, consultar facturas, etc.) desde el navegador.
+The frontend interface is developed using Next.js (exported from v0.dev), and connects to the backend’s REST API. It allows user interaction with the CRM system (create users, retrieve invoices, etc.) directly from the browser.
 
-Corre localmente en http://localhost:8000 (según configuración del frontend).
-Se comunica con la API del backend en http://localhost:3000.
-Está desacoplado del backend, respetando la arquitectura por capas.
-
+- Runs locally at: http://localhost:8000 (configurable).
+- Communicates with backend API on: http://localhost:3000.
+- Decoupled from the backend, respecting the layered architecture.
 ---
 
 ## Diagrams
@@ -149,11 +147,11 @@ classDiagram
     InvoiceService --> UserService : usa
 ```
 
-- User e Invoice: Modelos de datos principales.
-- Controllers: Manejan las solicitudes HTTP.
-- Services: Contienen la lógica de negocio.
-- Repositories: Gestionan el acceso a datos.
-- Relaciones: Muestra cómo interactúan las clases.
+- User and Invoice: Main data models
+- Controllers: Handle HTTP requests
+- Services: Contain business logic
+- Repositories: Manage data access
+- Relationships: Shows how classes interact
 
 ### Detailed Class Diagram
 
@@ -161,36 +159,35 @@ classDiagram
 
 
 Incluye:
-- Entidades de Dominio
-- Capa de Controladores (FastAPI)
-- Capa de Servicios
-- Capa de Repositorios
-- Relaciones Principales
-- Patrones de Diseño
-- Validaciones
-- Mapeo ORM
+- Domain entities
+- Controller layer (FastAPI)
+- Service layer
+- Repository layer
+- Main relationships
+- Design patterns
+- Validations
+- ORM mapping
 
 
 ### Relational Database Model
 
 ![Relational Database Model](imagenes/RelationalDatabase.png)
 
-Relaciones:
+Relationships:     
 
-Un usuario (users) puede tener múltiples facturas (invoices)
-La relación se establece a través del campo user_email en la tabla invoices que referencia el campo email en la tabla users
+A user (users) can have multiple invoices
+The relationship is established through the user_email field in the invoices table that references the email field in the users table
 
-Claves Principales (PK)
-users.id: Identificador único de cada usuario
-invoices.id: Identificador único de cada factura
-Claves Foráneas (FK)
-invoices.user_email: Referencia a users.email (relación uno a muchos)
-Índices
-users.email: Para búsquedas rápidas por correo
-invoices.user_email: Para optimizar consultas de facturas por usuario
-Feedback submitted
+Primary Keys (PK)
+users.id: Unique identifier for each user
+invoices.id: Unique identifier for each invoice
 
+Foreign Keys (FK)
+invoices.user_email: References users.email (one-to-many relationship)
 
+Indexes
+users.email: For fast email lookups
+invoices.user_email: To optimize invoice queries by user
 
 
 ### Use Cases and Sequence Diagrams
@@ -311,49 +308,70 @@ sequenceDiagram
    git clone https://github.com/your-repo.git
    cd your-repo
 
-2. Crea un entorno virtual e instalalo (opcional)
+2. Create a virtual environment and install it (optional)
 
 ```bash
 python -m venv venv
 source venv/bin/activate        # En Windows: venv\Scripts\activate
 ```
 
-3. Instala las dependencias
+3. Install dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-4. Crea el archivo .env con la configuración de base de datos
+4. Create the .env file with database configuration
 
-En la raíz del proyecto, crea un archivo llamado .env y agrega lo siguiente:
+In the root of the project, create a file called .env and add the following:
 
 ```bash
 DATABASE_URL=sqlite:///./crm.sqlite
 ```
 
-5. Inicializa la base de datos
+5. Initialize the database
 ```bash
 python -m backend.init_db
 ```
 
-6. Ejecuta el backend (en la terminal)
+6. Run the backend (in the terminal)
 ```bash
 python -m backend.main
 ```
-Esto ejecuta la lógica del CRM desde consola y conecta con la base de datos crm.sqlite.
+This runs the CRM logic from the console and connects to the crm.sqlite database.
 
-7. Ejecuta el frontend (API FastAPI para probar desde Swagger UI)
+7. Run the frontend (API FastAPI for testing from Swagger UI)
 
 ```bash
 uvicorn frontend.main_fastapi:app --reload --port 8000
 
 ```
-Esto levanta el servidor de la API en modo desarrollo en el puerto 8000.
+This starts the API server in development mode on port 8000.
 
-8. Accede a la documentación de la API:
+8. Access the API documentation:
 
 Frontend (FastAPI docs): http://localhost:8000/docs
 
+---
 
-## Requisitos
+## API Endpoints
+
+Below is a summary of the available API endpoints exposed by the FastAPI backend:
+
+| Endpoint               | Method | Description                        |
+|------------------------|--------|------------------------------------|
+| `/users`              | GET    | Retrieve a list of all users       |
+| `/users/{user_id}`    | GET    | Get details of a specific user     |
+| `/users`              | POST   | Create a new user                  |
+| `/users/{user_id}`    | PUT    | Update an existing user            |
+| `/users/{user_id}`    | DELETE | Delete a user                      |
+| `/invoices`           | GET    | Retrieve all invoices              |
+| `/invoices/{id}`      | GET    | Get a specific invoice             |
+| `/invoices`           | POST   | Create a new invoice               |
+| `/invoices/{id}`      | PUT    | Update an existing invoice         |
+| `/invoices/{id}`      | DELETE | Delete an invoice                  |
+| `/invoices/user/{email}` | GET | Get all invoices by user email     |
+
+These endpoints return JSON responses and follow RESTful principles.
+
+
 
