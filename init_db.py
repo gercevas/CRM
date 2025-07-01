@@ -1,8 +1,12 @@
 import sqlite3
 import os
+from dotenv import load_dotenv
+
+# Cargar variables del archivo .env
+load_dotenv()
 
 # Ruta al archivo de base de datos
-DB_PATH = "crm.sqlite"
+DB_PATH = os.getenv("SQLITE_PATH", "crm.sqlite")
 
 def create_tables():
     # Conectar a SQLite

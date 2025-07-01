@@ -265,9 +265,53 @@ sequenceDiagram
 
 ---
 
-## Installation
+
+## Deployment
 
 1. Clone the repository:
    ```bash
    git clone https://github.com/your-repo.git
    cd your-repo
+
+2. Crea un entorno virtual e instalalo (opcional)
+
+```bash
+python -m venv venv
+source venv/bin/activate        # En Windows: venv\Scripts\activate
+```
+
+3. Instala las dependencias
+```bash
+pip install -r requirements.txt
+```
+
+4. Crea el archivo .env con la configuración de base de datos
+
+En la raíz del proyecto, crea un archivo llamado .env y agrega lo siguiente:
+
+```bash
+DATABASE_URL=sqlite:///./crm.sqlite
+```
+
+5. Inicializa la base de datos
+```bash
+python -m backend.init_db
+```
+
+6. Ejecuta el backend (en la terminal)
+```bash
+python -m backend.main
+```
+Esto ejecuta la lógica del CRM desde consola y conecta con la base de datos crm.sqlite.
+
+7. Ejecuta el frontend (API FastAPI para probar desde Swagger UI)
+
+```bash
+uvicorn frontend.main_fastapi:app --reload --port 8000
+
+```
+Esto levanta el servidor de la API en modo desarrollo en el puerto 8000.
+
+8. Accede a la documentación de la API:
+
+Frontend (FastAPI docs): http://localhost:8000/docs

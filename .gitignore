@@ -91,3 +91,7 @@ Thumbs.db
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+# Archivos de la base de datos
+*.sqlite
+.env
